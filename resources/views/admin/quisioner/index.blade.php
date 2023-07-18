@@ -1,0 +1,316 @@
+@extends('admin.layouts.adminlayout')
+@section('script_head')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endsection
+@section('content')
+    <!-- Default box -->
+    <div class="container-fluid py-4">
+
+        <div class="row">
+            <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4">
+                <div class="card collapsed-card">
+                    <div class="card-header">
+                        @if (session('status'))
+                            <div class="alert alert-success alert-dismissible">
+                                <button type="button" class="close btn btn-danger" data-dismiss="alert"
+                                    aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i> Berhasil!</h4>
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        <div class="row">
+                            <h6 class="card-title col-12">
+                                Periode Kuisioner
+                            </h6>
+                            <h3 class="card-title col-6">
+                                <a href="{{ route('kuisioner.create') }}" class="btn btn-success"> + Tambah Periode</a>
+
+                            </h3>
+                            <div class="card-tools col-6 text-end">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                {{-- <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                                    <i class="fas fa-times"></i>
+                                </button> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0  table-responsive" style="margin: 20px; display: none;">
+                        <table id="previewAkun" class="table table-striped table-bordered display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Pertanyaan</th>
+                                    <th>Kuisioner Untuk</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($kuisioner as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }} </td>
+                                        <td> {{ $item->question }}</td>
+                                        <td> {{ $item->for }}</td>
+                                        <td>
+                                            <a href="{{ route('kuisioner.show', $item->id) }}">
+                                                <i class="fa solid fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('kuisioner.edit', $item->id) }}">
+                                                <i class='fas fa-edit fa-lg'></i></a>
+                                            <a href="{{ route('kuisioner.delete', $item->id) }}"
+                                                style='border: none; background-color:transparent;' class='hapusData'>
+                                                <i class='fas fa-trash fa-lg text-danger'></i>
+                                            </a>
+                                        </td>
+                                    <tr>
+                                @endforeach
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4">
+                <div class="card collapsed-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <h6 class="card-title col-12">
+                                Data Jenis Kuisioner
+                            </h6>
+                            <h3 class="card-title col-6">
+                                <a href="{{ route('jenis-kuis.create_new') }}" class="btn btn-success"> + Tambah Jenis
+                                    Kuisioner</a>
+
+                            </h3>
+                            @if (session('status'))
+                                <div class="alert alert-success alert-dismissible">
+                                    <button type="button" class="close btn btn-danger" data-dismiss="alert"
+                                        aria-hidden="true">×</button>
+                                    <h4><i class="icon fa fa-check"></i> Berhasil!</h4>
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+                            <div class="card-tools col-6 text-end">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                {{-- <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                                    <i class="fas fa-times"></i>
+                                </button> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0  table-responsive" style="margin: 20px; display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama Jenis</th>
+                                        <th scope="col">Nama Kuisioner</th>
+                                        <th scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($jenis as $data)
+                                        <tr class="">
+                                            <td scope="row">{{ $loop->iteration }} </td>
+                                            <td>{{ $data->nama_jenis }}</td>
+                                            <td>{{ $data->quisioner->question }} </td>
+                                            <td>
+
+                                                <a href="{{ route('jenis-kuis.edit', $data->id) }}">
+                                                    <i class='fas fa-edit fa-lg'></i></a>
+                                                <a href="{{ route('jenis-kuis.delete', $data->id) }}"
+                                                    style='border: none; background-color:transparent;' class='hapusData'>
+                                                    <i class='fas fa-trash fa-lg text-danger'></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4">
+                <div class="card collapsed-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <h6 class="card-title col-12">
+                                Data List Pertanyaan
+                            </h6>
+                            <h3 class="card-title col-6">
+                                <a href="{{ route('list-pertanyaan.create_new') }}" class="btn btn-success"> + Tambah
+                                    Pertanyaan</a>
+
+                            </h3>
+                            @if (session('status'))
+                                <div class="alert alert-success alert-dismissible">
+                                    <button type="button" class="close btn btn-danger" data-dismiss="alert"
+                                        aria-hidden="true">×</button>
+                                    <h4><i class="icon fa fa-check"></i> Berhasil!</h4>
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+                            <div class="card-tools col-6 text-end">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                {{-- <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                                    <i class="fas fa-times"></i>
+                                </button> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0  table-responsive" style="margin: 20px; display: none;">
+                        <table id="previewAkun" class="table table-striped table-bordered display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Judul Pertanyaan</th>
+                                    <th>Jenis Kuisioner </th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($list as $item)
+                                    <tr>
+                                        <td> {{ $loop->iteration }}</td>
+                                        <td> {{ $item->judul_pertanyaan }}</td>
+                                        <td> {{ $item->jenisQuisioner->nama_jenis }}</td>
+                                        <td>
+
+                                            <a href="{{ route('list-pertanyaan.edit', $item->id) }}">
+                                                <i class='fas fa-edit fa-lg'></i></a>
+                                            <a href="{{ route('list-pertanyaan.delete', $item->id) }}"
+                                                style='border: none; background-color:transparent;' class='hapusData'>
+                                                <i class='fas fa-trash fa-lg text-danger'></i>
+                                            </a>
+                                        </td>
+                                    <tr>
+                                @endforeach
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- /.card -->
+    @endsection @section('script_footer')
+    <script src="{{ asset('vendor/adminlte3/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('vendor/adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('vendor/adminlte3/js/adminlte.min.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    {{-- <script src="../../dist/js/demo.js"></script> --}}
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        // $(document).ready(function() {
+        //     $('#previewAkun').DataTable({
+        //         "serverSide": true,
+        //         "processing": true,
+        //         "ajax": {
+        //             "url": "{{ route('akun.dataTable') }}",
+        //             "dataType": "json",
+        //             "type": "POST",
+        //             "data": {
+        //                 _token: "{{ csrf_token() }}"
+        //             }
+        //         },
+        //         "columns": [{
+        //             "data": "name"
+        //         }, {
+        //             "data": "email"
+        //         }, {
+        //             "data": "role"
+        //         }, {
+        //             "data": "options"
+        //         }],
+        //         "language": {
+        //             "decimal": "",
+        //             "emptyTable": "Tak ada data yang tersedia pada tabel ini",
+        //             "info": "Menampilkan _START_ hingga _END_ dari _TOTAL_ entri",
+        //             "infoEmpty": "Menampilkan 0 hingga 0 dari 0 entri",
+        //             "infoFiltered": "(difilter dari _MAX_ total entri)",
+        //             "infoPostFix": "",
+        //             "thousands": ",",
+        //             "lengthMenu": "Tampilkan _MENU_ entri",
+        //             "loadingRecords": "Loading...",
+        //             "processing": "Sedang Mengambil Data...",
+        //             "search": "Pencarian:",
+        //             "zeroRecords": "Tidak ada data yang cocok ditemukan",
+        //             "paginate": {
+        //                 "first": "Pertama",
+        //                 "last": "Terakhir",
+        //                 "next": "Selanjutnya",
+        //                 "previous": "Sebelumnya"
+        //             },
+        //             "aria": {
+        //                 "sortAscending": ": aktifkan untuk mengurutkan kolom ascending",
+        //                 "sortDescending": ": aktifkan untuk mengurutkan kolom descending"
+        //             }
+        //         }
+
+        //     });
+
+        //     // hapus data
+        //     $('#previewAkun').on('click', '.hapusData', function() {
+        //         var id = $(this).data("id");
+        //         var url = $(this).data("url");
+        //         Swal
+        //             .fire({
+        //                 title: 'Apa kamu yakin?',
+        //                 text: "Kamu tidak akan dapat mengembalikan ini!",
+        //                 icon: 'warning',
+        //                 showCancelButton: true,
+        //                 confirmButtonColor: '#3085d6',
+        //                 cancelButtonColor: '#d33',
+        //                 confirmButtonText: 'Ya, hapus!',
+        //                 cancelButtonText: 'Batal'
+        //             })
+        //             .then((result) => {
+        //                 if (result.isConfirmed) {
+        //                     // console.log();
+        //                     $.ajax({
+        //                         url: url,
+        //                         type: 'DELETE',
+        //                         data: {
+        //                             "id": id,
+        //                             "_token": "{{ csrf_token() }}"
+        //                         },
+        //                         success: function(response) {
+        //                             // console.log();
+        //                             Swal.fire('Terhapus!', response.msg, 'success');
+        //                             $('#previewAkun').DataTable().ajax.reload();
+        //                         }
+        //                     });
+        //                 }
+        //             })
+        //     });
+        // });
+    </script>
+@endsection
